@@ -1,3 +1,5 @@
-export { default as songRouter } from "./song";
-export { default as userRouter } from "./user";
-export { default as playlistRouter } from "./playlist";
+import app from "./app";
+
+const PORT = 8000;
+
+app.listen(PORT, () => console.log(`Server init at http://localhost:${PORT}`));
