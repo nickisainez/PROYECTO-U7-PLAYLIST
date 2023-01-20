@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { networkInterfaces } from "os";
 
 const prisma = new PrismaClient();
 const  bcrypt  =  require ('bcrypt') ;
@@ -27,7 +26,6 @@ export const create_user = async (req: Request, res: Response): Promise<void> =>
     });
       res.status(201).json({ ok: true, message: "user created successfully" });
     } catch (error) {
-      console.log(error)
       res.status(500).json({ ok: false, message: error });
     }
   };
@@ -40,7 +38,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (userLogin){
       const comparePass = await bcrypt.compare(password,userLogin.password)
       if (comparePass){
-        //await prisma.user.update({ where:{id : userLogin.id}})
+        //actualizar la ultima session
+        await prisma.user.update({ where:{ id : userLogin.id },
+          data: {
+            last_session: new Date(),
+          },})
         res.status(200).json({messaje:"Valid email and pass"})
       }else{
         res.status(404).json({messaje:"Invalid Pass"})
@@ -53,6 +55,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+//Actualizacion de datos
+export const UpDateUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = Number(req.params.id);
+    const data = req.body;
+
+    const user = await prisma.user.update({
+      where: { id },
+      data,
+    });
+
+    res.json(user);
+    
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error });
+  }
+};
 
 //Eliminar Usuarios
 
