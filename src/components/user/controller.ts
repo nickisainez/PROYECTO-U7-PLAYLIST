@@ -21,11 +21,14 @@ export const create_user = async (req: Request, res: Response): Promise<void> =>
     try {
       const {name ,email ,password ,date_born } = req.body;
       const password_hash = await bcrypt.hash(password , 8)
-      await prisma.user.create({ 
+      const registro = await prisma.user.create({ 
         data:{ name , email , password : password_hash , date_born: new Date(date_born)} 
     });
+      console.log(registro);
+      
       res.status(201).json({ ok: true, message: "user created successfully" });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ ok: false, message: error });
     }
   };
