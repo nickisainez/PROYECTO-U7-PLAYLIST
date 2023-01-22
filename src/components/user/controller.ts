@@ -84,6 +84,23 @@ export const UpDateUser = async (req: Request, res: Response): Promise<void> => 
     res.status(500).json({ ok: false, message: error });
   }
 };
+//Actualizacion de clave
+export const UpDatePassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = Number(req.params.id);
+    const password = req.body.password;
+    const password_hash = await bcrypt.hash(password , 8)
+    const user = await prisma.user.update({
+      where: { id },
+      data:{password:password_hash},
+    });
+
+    res.json(user);
+    
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error });
+  }
+};
 
 //Eliminar Usuarios
 
@@ -98,3 +115,4 @@ export const DropUser = async (_req: Request, res: Response): Promise<void> => {
     res.status(500).json({ ok: false, message: error });
   }
 };
+
