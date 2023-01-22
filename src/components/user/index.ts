@@ -12,4 +12,5 @@ userRouter.put("/UpDateUser/:id", UpDateUser);
 //Actualizar password
 userRouter.put("/UpDatePassword/:id", UpDatePassword);
 
+
 export default userRouter;

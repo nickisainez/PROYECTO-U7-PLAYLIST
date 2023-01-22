@@ -1,9 +1,9 @@
 import { Router } from "express";
-//import { findAll, store } from "./controller";
+import { playlist, createplaylist } from "./controller";
 
 const playlistRouter: Router = Router();
 
-// playlistRouter.get("/", findAll);
-// playlistRouter.post("/", store);
+playlistRouter.get("/", playlist);
+playlistRouter.post("/", createplaylist);
 
 export default playlistRouter;
