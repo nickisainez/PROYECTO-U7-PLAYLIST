@@ -19,7 +19,7 @@ model User {
   update_at     DateTime @updatedAt
   date_born     DateTime
 
-  post Playlist[]
+  playlists Playlist[]
 }
 
 model Song{
@@ -30,19 +30,16 @@ model Song{
   year          Int
   genre         String
   duration      Int
-  private       Boolean @default(false)
+  isPublic      Boolean? @default(false)
 
-  post Playlist[]
+  playlists Playlist[]
   }
 
 model Playlist{
-  id           Int     @id @default(autoincrement())
-  name         String  @unique
-  user          User    @relation(fields: [userId], references: [id])
-  userId       Int
-  song       Song    @relation(fields: [songId], references: [id])
-  songId       Int
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  user          User    @relation(fields: [id_user], references: [id])
+  id_user       Int
   
-  }
-
-
+  songs         Song[]
+}

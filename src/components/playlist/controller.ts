@@ -3,28 +3,30 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const playlist = async (_req: Request, res: Response): Promise<void> => {
+export const allplaylist = async (_req: Request, res: Response): Promise<void> => {
     try {
-      const playlist = await prisma.playlist.findMany();
+      const playlists = await prisma.playlist.findMany({
+        include: {songs : true}
+      });
   
       res.status(200).json({
         ok: true,
-        data: playlist,
+        data: playlists,
       });
     } catch (error) {
       res.status(500).json({ ok: false, message: error });
     }
   };
 
-  export const createplaylist = async (req: Request, res: Response): Promise<void> => {
+export const createplaylist = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { name, userId, songId} = req.body;
+      const { name, user } = req.body;
   
       await prisma.playlist.create({
         data: {
           name,
-          userId,
-          songId
+          user: {connect: {id: user}},
+                    
         },
       });
   
@@ -34,3 +36,24 @@ export const playlist = async (_req: Request, res: Response): Promise<void> => {
     }
   };
 
+export const addsongtoplaylist = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data = req.body;
+
+    await prisma.playlist.update({
+      where:{
+        id: data.id_playlist
+      },
+      include: {
+        songs: true,
+      },
+      data: {
+        songs: { connect: { id: data.id_song } }
+      }
+    });
+    res.status(201).json({ ok: true, message: "Canción agregada"});
+
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error });
+  }
+};
