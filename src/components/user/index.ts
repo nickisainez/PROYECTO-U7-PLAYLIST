@@ -4,9 +4,9 @@ import { authorizationMiddleware } from "../middleware"
 
 const userRouter: Router = Router();
 
-userRouter.post("/", create_user);
-userRouter.post("/login", login);
-userRouter.get("/listUser", authorizationMiddleware, listUser );
+userRouter.post("/",create_user);
+userRouter.post("/login" ,login);
+userRouter.get("/listUser", listUser );
 userRouter.delete("/DropUser", DropUser);
 userRouter.put("/UpDateUser/:id", UpDateUser);
 //Actualizar password

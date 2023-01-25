@@ -3,8 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-dotenv.config()
-
 const prisma = new PrismaClient();
 const  bcrypt  =  require ('bcrypt') ;
 //Listado de usuarios
@@ -55,14 +53,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       const token = jwt.sign( req.body , T_secret , {
         expiresIn: "1h",
       });  
-        res.status(200).json({messaje:"Valid email and pass",token})
+        res.status(200).json({message:"Valid email and pass",token})
       }else{
-        res.status(404).json({messaje:"Invalid Pass"})
+        res.status(404).json({message:"Invalid Pass"})
       }
     }else{
-      res.status(404).json({messaje:"User not found"})
+      res.status(404).json({message:"User not found"})
     }
   }catch(e){
+    console.log(e)
     res.status(500).send("Fatal error")
   }
 };
